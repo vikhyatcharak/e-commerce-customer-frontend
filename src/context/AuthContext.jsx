@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { authAPI } from '../api/customer.js'
 import { toast } from 'react-toastify'
-import CustomerApi from '../api/axios.js'
+import authAPI from '../api/customer.js'
 
 const AuthContext = createContext()
 
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
 
         const checkTokenExpiry = async () => {
             try {
-                const response = await CustomerApi.getCurrentCustomer()
+                const response = await authAPI.getCurrentCustomer()
                 if (!response.data.success) {
                     await refreshToken()
                 }
@@ -60,8 +60,8 @@ export const AuthProvider = ({ children }) => {
             const response = await authAPI.login(credentials)
             if (response.data?.success) {
                 localStorage.setItem('customerToken', response.data.data.accessToken)
-                setIsAuthenticated(true)
                 setCustomer(response.data.data.user)
+                setIsAuthenticated(true)
                 toast.success('Login successful!')
             }
             return { success: true, data: response.data.data }
@@ -91,9 +91,10 @@ export const AuthProvider = ({ children }) => {
         try {
             const response = await authAPI.verifyOtp({ phone, otp, name, email })
             if (response.data.success) {
+                localStorage.setItem('customerToken', response.data.data.accessToken)
                 setCustomer(response.data.data.user)
                 setIsAuthenticated(true)
-                toast.success('Login successful!')
+                toast.success('Guest Login successful!')
                 return { success: true, data: response.data.data }
             }
         } catch (error) {
