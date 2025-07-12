@@ -9,18 +9,21 @@ import Homepage from './pages/Homepage.jsx'
 
 function App() {
     return (
-            <Router>
-                <AuthProvider>
-                    <CartProvider>
-                        <AppRoutes />
-                    </CartProvider>
-                </AuthProvider>
-            </Router>
+        <Router>
+            <AuthProvider>
+                <CartProvider>
+                    <AppRoutes />
+                </CartProvider>
+            </AuthProvider>
+        </Router>
     )
 }
 function AppRoutes() {
-    const { isAuthenticated } = useAuth()
+    const { isAuthenticated, loading } = useAuth()
 
+    if (loading) {
+        return <div className="flex justify-center items-center min-h-screen">Loading...</div>
+    }
     return (
         <Routes>
             {/* Public Routes */}
