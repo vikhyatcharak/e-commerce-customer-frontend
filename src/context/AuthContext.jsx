@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { authAPI } from '../api/customer.js'
 import { toast } from 'react-toastify'
-import authAPI from '../api/customer.js'
-
 const AuthContext = createContext()
 
 export const AuthProvider = ({ children }) => {
