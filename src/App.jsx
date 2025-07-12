@@ -4,13 +4,11 @@ import { AuthProvider, useAuth } from './context/AuthContext.jsx'
 import { CartProvider } from './context/CartContext.jsx'
 import Login from './pages/auth/Login.jsx'
 import Register from './pages/auth/Register.jsx'
-
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import Layout from './components/layout/Layout.jsx'
+import Homepage from './pages/Homepage.jsx'
 
 function App() {
     return (
-        <>
             <Router>
                 <AuthProvider>
                     <CartProvider>
@@ -18,13 +16,6 @@ function App() {
                     </CartProvider>
                 </AuthProvider>
             </Router>
-
-            <ToastContainer
-                position="top-right"
-                autoClose={3000}
-                theme="colored"
-            />
-        </>
     )
 }
 function AppRoutes() {
@@ -34,11 +25,19 @@ function AppRoutes() {
         <Routes>
             {/* Public Routes */}
             {isAuthenticated
-                ? <Route path="/" element={<Navigate to="/customer/dashboard" replace />} />
-                : <Route path="/" element={<Navigate to="/customer/login" replace />} />
+                ? <Route path="/" element={<Navigate to="/homepage" replace />} />
+                : <Route path="/" element={<Navigate to="/login" replace />} />
             }
-            <Route path="/customer/login" element={<Login />} />
-            <Route path="/customer/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+
+            <Route path="/" element={<Layout />}>
+                <Route path='homepage' element={<Homepage />} />
+                <Route path="cart" element={"<Cart />"} />
+                <Route path="payment" element={"<Payment />"} />
+                <Route path="profile" element={"<Profile />"} />
+                <Route path="order-confirmation" element={"<OrderConfirmation />"} />
+            </Route>
         </Routes>
     )
 }
