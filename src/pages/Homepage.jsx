@@ -7,16 +7,24 @@ import Modal from '../components/common/Modal.jsx'
 import Button from '../components/common/Button.jsx'
 import { toast } from 'react-toastify'
 
-const ProductModal = ({ product, isOpen, onClose }) => {
+const ProductModal = ({ product, isOpen, onClose, loading }) => {
     const { addToCart } = useCart()
     const [selectedVariant, setSelectedVariant] = useState(null)
     const [quantity, setQuantity] = useState(1)
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-[60vh]">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+        )
+    }
 
     useEffect(() => {
         if (product?.variants?.length > 0) {
             setSelectedVariant(product.variants[0])
         }
-    }, [product])
+    }, [product?.variants])
 
     const handleAddToCart = async () => {
         if (!selectedVariant) {
@@ -71,7 +79,7 @@ const ProductModal = ({ product, isOpen, onClose }) => {
                     </div>
 
                     {/* Variants */}
-                    {product.variants && product.variants.length > 0 && (
+                    {product.variants && product.variants.length > 0 ? (
                         <div>
                             <h4 className="text-lg font-semibold mb-3">Available Variants</h4>
                             <div className="space-y-3">
@@ -80,8 +88,8 @@ const ProductModal = ({ product, isOpen, onClose }) => {
                                         key={variant.id}
                                         onClick={() => setSelectedVariant(variant)}
                                         className={`p-4 border rounded-lg cursor-pointer transition-colors ${selectedVariant?.id === variant.id
-                                                ? 'border-blue-500 bg-blue-50'
-                                                : 'border-gray-200 hover:border-gray-300'
+                                            ? 'border-blue-500 bg-blue-50'
+                                            : 'border-gray-200 hover:border-gray-300'
                                             }`}
                                     >
                                         <div className="flex justify-between items-start">
@@ -104,8 +112,10 @@ const ProductModal = ({ product, isOpen, onClose }) => {
                                     </div>
                                 ))}
                             </div>
-                        </div>
-                    )}
+                        </div>)
+                        : (
+                            <div className="text-red-500">No Variants available</div>
+                        )}
 
                     {/* Quantity and Add to Cart */}
                     {selectedVariant && selectedVariant.stock > 0 && (
@@ -168,7 +178,6 @@ const Homepage = () => {
         subcategory: '',
         search: ''
     })
-
     useEffect(() => {
         fetchInitialData()
     }, [])
@@ -179,6 +188,7 @@ const Homepage = () => {
 
     const fetchInitialData = async () => {
         try {
+            setLoading(true)
             const [productsRes, categoriesRes, subcategoriesRes] = await Promise.all([
                 productsAPI.getAllProducts(),
                 productsAPI.getCategories(),
@@ -205,10 +215,12 @@ const Homepage = () => {
     const fetchProducts = async () => {
         try {
             let response
-            if (filters.category) {
-                response = await productsAPI.getProductsByCategory(filters.category)
-            } else if (filters.subcategory) {
-                response = await productsAPI.getProductsBySubcategory(filters.subcategory)
+            if (filters.category || filters.subcategory) {
+                if (filters.subcategory) {
+                    response = await productsAPI.getProductsBySubcategory(filters.subcategory)
+                } else if (filters.category) {
+                    response = await productsAPI.getProductsByCategory(filters.category)
+                }
             } else {
                 response = await productsAPI.getAllProducts()
             }
@@ -230,27 +242,32 @@ const Homepage = () => {
         }
     }
 
-    const handleProductView = (product) => {
-        setSelectedProduct(product)
-        setShowProductModal(true)
-    }
-
-    const handleQuickAddToCart = async (variantId) => {
-        await addToCart(variantId, 1)
+    const handleProductView = async (product) => {
+        try {
+            setLoading(true)
+            const response = await productsAPI.getVariants(product.id)
+            if (response.data.success) {
+                let enrichedProduct = { ...product, variants: response.data.data.variants }
+                setSelectedProduct(enrichedProduct)
+                setShowProductModal(true)
+            }
+        } catch (error) {
+            console.error("Error fetching variants:", error)
+            toast.error(error.response.data.message || "Failed to load product details")
+        } finally{
+            setLoading(false)
+        }
     }
 
     const handleFilterChange = (filterType, value) => {
         setFilters(prev => ({
-            ...prev,
-            [filterType]: value,
+            ...prev, [filterType]: value,
             // Reset dependent filters
             ...(filterType === 'category' && { subcategory: '' })
         }))
     }
 
-    const filteredSubcategories = subcategories.filter(sub =>
-        !filters.category || sub.category_id === parseInt(filters.category)
-    )
+    const filteredSubcategories = subcategories.filter(sub => !filters.category || sub.category_id === parseInt(filters.category))
 
     if (loading) {
         return (
@@ -349,7 +366,6 @@ const Homepage = () => {
                                 key={product.id}
                                 product={product}
                                 onViewDetails={handleProductView}
-                                onAddToCart={handleQuickAddToCart}
                             />
                         ))}
                     </div>
@@ -361,6 +377,7 @@ const Homepage = () => {
                 product={selectedProduct}
                 isOpen={showProductModal}
                 onClose={() => setShowProductModal(false)}
+                loading={loading}
             />
         </div>
     )

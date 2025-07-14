@@ -1,10 +1,7 @@
 import React from 'react'
 import Button from './Button.jsx'
 
-const ProductCard = ({ product, onViewDetails, onAddToCart }) => {
-    const defaultVariant = product.variants?.[0]
-    const hasStock = defaultVariant && defaultVariant.stock > 0
-
+const ProductCard = ({ product, onViewDetails }) => {
     return (
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
             <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-t-lg bg-gray-200">
@@ -24,12 +21,6 @@ const ProductCard = ({ product, onViewDetails, onAddToCart }) => {
                     </p>
                 )}
 
-                <div className="flex items-center justify-between mb-3">
-                    <span className="text-lg font-semibold text-blue-600">
-                        ₹{defaultVariant?.price || 0}
-                    </span>
-                </div>
-
                 <div className="flex gap-2">
                     <Button
                         variant="outline"
@@ -38,15 +29,6 @@ const ProductCard = ({ product, onViewDetails, onAddToCart }) => {
                         className="flex-1"
                     >
                         View Details
-                    </Button>
-                    <Button
-                        variant="primary"
-                        size="sm"
-                        disabled={!hasStock}
-                        onClick={() => onAddToCart(defaultVariant?.id)}
-                        className="flex-1"
-                    >
-                        Add to Cart
                     </Button>
                 </div>
             </div>

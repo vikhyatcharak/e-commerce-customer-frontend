@@ -61,8 +61,8 @@ export const AuthProvider = ({ children }) => {
                 setCustomer(response.data.data.user)
                 setIsAuthenticated(true)
                 toast.success('Login successful!')
+                return { success: true, data: response.data.data }
             }
-            return { success: true, data: response.data.data }
         } catch (error) {
             console.log(error)
             toast.error(error.response?.data?.message || 'Login failed')

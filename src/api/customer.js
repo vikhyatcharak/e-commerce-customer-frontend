@@ -16,7 +16,7 @@ export const productsAPI = {
     //products
     getAllProducts: () => CustomerApi.get('/products'),
     getPaginatedProducts:()=>CustomerApi.get('/products/paginated'),
-    getVariants:(id)=>CustomerApi.get(`/products/paginated/${id}`),
+    getVariants:(id)=>CustomerApi.get(`/products/variant/${id}`),
     getProductById: (id) => CustomerApi.get(`/products/${id}`),
     //categories
     getCategories: () => CustomerApi.get('/categories'),
