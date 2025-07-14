@@ -21,10 +21,7 @@ const Layout = () => {
                         <div>
                             <h4 className="font-semibold mb-4">Quick Links</h4>
                             <ul className="space-y-2 text-gray-400">
-                                <li><a href="/" className="hover:text-white">Home</a></li>
-                                <li><a href="/products" className="hover:text-white">Products</a></li>
-                                <li><a href="/categories" className="hover:text-white">Categories</a></li>
-                            </ul>
+                                <li><a href="/" className="hover:text-white">Home</a></li>                            </ul>
                         </div>
                         <div>
                             <h4 className="font-semibold mb-4">Customer Service</h4>

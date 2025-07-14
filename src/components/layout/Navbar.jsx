@@ -25,19 +25,6 @@ const Navbar = () => {
                         <span className="text-2xl font-bold text-blue-600">🛍️ ShopEase</span>
                     </Link>
 
-                    {/* Navigation Links */}
-                    <div className="hidden md:flex items-center space-x-8">
-                        <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors">
-                            Home
-                        </Link>
-                        <Link to="/products" className="text-gray-700 hover:text-blue-600 transition-colors">
-                            Products
-                        </Link>
-                        <Link to="/categories" className="text-gray-700 hover:text-blue-600 transition-colors">
-                            Categories
-                        </Link>
-                    </div>
-
                     {/* Right side - Cart and User */}
                     <div className="flex items-center space-x-4">
                         {/* Cart */}

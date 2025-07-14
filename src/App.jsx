@@ -54,6 +54,8 @@ function AppRoutes() {
                 <Route path="payment" element={"<Payment />"} />
                 <Route path="profile" element={"<Profile />"} />
                 <Route path="order-confirmation" element={"<OrderConfirmation />"} />
+                <Route path="contact" element={"<Contact />"} />
+                <Route path="support" element={"<Support />"} />
             </Route>
         </Routes>
     )
