@@ -27,7 +27,9 @@ export const productsAPI = {
     //subcategories
     getSubcategories: () => CustomerApi.get('/subcategories'),
     getPaginatedSubcategories: () => CustomerApi.get('/subcategories/paginated'),
-    getProductsBySubcategory: (subcategoryId) => CustomerApi.get(`/subcategories/products/${subcategoryId}`)
+    getProductsBySubcategory: (subcategoryId) => CustomerApi.get(`/subcategories/products/${subcategoryId}`),
+    //coupon
+    getCoupon:(code)=>CustomerApi.post(`/coupon/get-coupon/${code}`)
 }
 
 export const cartAPI = {
