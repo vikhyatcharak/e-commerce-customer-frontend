@@ -108,18 +108,19 @@ const AddressModal = ({ isOpen, onClose, onAddressAdded }) => {
 const Cart = () => {
     const navigate = useNavigate()
     const { isAuthenticated } = useAuth()
-    const { cartItems, cartSummary, updateCartItem, removeFromCart, validateCartStock } = useCart()
+    const { fetchCart, cartItems, cartSummary, updateCartItem, removeFromCart, validateCartStock } = useCart()
     const [addresses, setAddresses] = useState([])
     const [selectedAddress, setSelectedAddress] = useState(null)
     const [showAddressModal, setShowAddressModal] = useState(false)
     const [loading, setLoading] = useState(false)
 
-    useEffect(() => {
+    useEffect(() =>async()=> {
         if (!isAuthenticated) {
             navigate('/login')
             return
         }
-        fetchAddresses()
+        await fetchAddresses()
+        await fetchCart()
     }, [isAuthenticated, navigate])
 
     const fetchAddresses = async () => {

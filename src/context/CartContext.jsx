@@ -13,7 +13,7 @@ export const CartProvider = ({ children }) => {
         totalItems: 0,
         subtotal: 0,
         tax: 0,
-        total: 0 
+        total: 0
     })
     const [loading, setLoading] = useState(false)
 
@@ -32,12 +32,18 @@ export const CartProvider = ({ children }) => {
         try {
             setLoading(true)
             const response = await cartAPI.getCart()
-            if (response.data.success) {
+            if (response?.data?.success) {
+                const summary = response.data.data.summary || {}
                 setCartItems(response.data.data.items || [])
-                setCartSummary(response.data.data.summary || {})
+                setCartSummary({
+                    totalItems: Number(summary.totalItems || 0),
+                    subtotal: Number(summary.subtotal || 0),
+                    tax: Number(summary.tax || 0),
+                    total: Number(summary.total || 0)
+                })
             }
         } catch (error) {
-            console.error('Error fetching cart:', error)
+            console.error('Error fetching cart:', error?.response?.data?.message)
         } finally {
             setLoading(false)
         }
@@ -60,12 +66,15 @@ export const CartProvider = ({ children }) => {
                 product_variant_id: productVariantId,
                 quantity
             })
-            
+
             if (response.data.success) {
                 toast.success('Item added to cart!')
-                fetchCart()
-                fetchCartCount()
+                await fetchCart()
+                await fetchCartCount()
                 return { success: true }
+            } else {
+                toast.error(response.data.message || 'Failed to add item to cart')
+                return { success: false }
             }
         } catch (error) {
             toast.error(error.response?.data?.message || 'Failed to add item to cart')
@@ -79,7 +88,7 @@ export const CartProvider = ({ children }) => {
                 product_variant_id: productVariantId,
                 quantity
             })
-            
+
             if (response.data.success) {
                 fetchCart()
                 fetchCartCount()
@@ -96,7 +105,7 @@ export const CartProvider = ({ children }) => {
             const response = await cartAPI.removeFromCart({
                 product_variant_id: productVariantId
             })
-            
+
             if (response.data.success) {
                 toast.success('Item removed from cart')
                 fetchCart()

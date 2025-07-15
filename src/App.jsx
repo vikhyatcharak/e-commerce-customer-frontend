@@ -6,6 +6,7 @@ import Login from './pages/auth/Login.jsx'
 import Register from './pages/auth/Register.jsx'
 import Layout from './components/layout/Layout.jsx'
 import Homepage from './pages/Homepage.jsx'
+import Cart from './pages/Cart.jsx'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -50,7 +51,7 @@ function AppRoutes() {
 
             <Route path="/" element={<Layout />}>
                 <Route path='homepage' element={<Homepage />} />
-                <Route path="cart" element={"<Cart />"} />
+                <Route path="cart" element={<Cart />} />
                 <Route path="payment" element={"<Payment />"} />
                 <Route path="order-confirmation" element={"<OrderConfirmation />"} />
                 <Route path="profile" element={"<Profile />"} />
