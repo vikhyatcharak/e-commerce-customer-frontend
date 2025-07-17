@@ -10,6 +10,7 @@ import Cart from './pages/Cart.jsx'
 import Payment from './pages/Payment.jsx'
 import OrderConfirmation from './pages/OrderConfirmation.jsx'
 import Orders from './pages/Orders.jsx'
+import Addresses from './pages/Addresses.jsx'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -57,9 +58,9 @@ function AppRoutes() {
                 <Route path="cart" element={<Cart />} />
                 <Route path="payment" element={<Payment />} />
                 <Route path="order-confirmation" element={<OrderConfirmation />} />
-                <Route path="profile" element={"<Profile />"} />
                 <Route path="orders" element={<Orders />} />
-                <Route path="addresses" element={"<Addresses />"} />
+                <Route path="addresses" element={<Addresses />} />
+                <Route path="profile" element={"<Profile />"} />
                 <Route path="contact" element={"<Contact />"} />
                 <Route path="support" element={"<Support />"} />
             </Route>
